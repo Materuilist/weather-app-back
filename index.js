@@ -32,6 +32,6 @@ app.use("/", (error, req, res, next) => {
 sequalize.sync().then(() => {
   app.listen(8000, () => {
     console.log(`I'm listening!`);
-    initDb(true, true);
+    // initDb(true, true);
   });
 });

@@ -5,9 +5,9 @@ import { parseUser } from "../controllers/shared.controller.js";
 
 const router = Router();
 
-router.post("/signup", signUp);
+router.post("/sign-up", signUp);
 
-router.post("/signin", signIn);
+router.post("/sign-in", signIn);
 
 router.get("/get-user", parseUser, getUser);
 

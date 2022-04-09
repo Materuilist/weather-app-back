@@ -7,7 +7,6 @@ const Role = sequalize.define("Role", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    autoIncrement: true,
     primaryKey: true,
   },
   name: {
@@ -18,7 +17,11 @@ const Role = sequalize.define("Role", {
 
 Role.hasMany(User, {
   foreignKey: "roleId",
+  as: "users",
 });
-User.belongsTo(Role);
+User.belongsTo(Role, {
+  foreignKey: "roleId",
+  as: "role",
+});
 
 export default Role;

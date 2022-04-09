@@ -21,6 +21,10 @@ const User = sequalize.define("User", {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
+  roleId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 export default User;
