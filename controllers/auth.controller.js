@@ -1,4 +1,4 @@
-import { ROLES } from "../constants/roles.constant.js";
+import { ROLES } from "../constants.js";
 import Error from "../entities/error.js";
 import User from "../model/user.model.js";
 import Encrypter from "../services/encrypter.js";

@@ -14,11 +14,19 @@ const Garment = sequalize.define("Garment", {
     allowNull: false,
   },
   imageData: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
+  },
+  saveData: {
+    type: DataTypes.TEXT,
+    allowNull: true,
   },
   clo: {
     type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  layer: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   sex: {

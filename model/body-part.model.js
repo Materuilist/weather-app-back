@@ -3,29 +3,26 @@ import { DataTypes } from "sequelize";
 import sequalize from "../utils/database.js";
 import Garment from "./garment.model.js";
 
-const User = sequalize.define("User", {
+const BodyPart = sequalize.define("BodyPart", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
   },
-  login: {
+  naming: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  sex: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  },
-  roleId: {
-    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
 
-export default User;
+BodyPart.hasMany(Garment, {
+  foreignKey: "bodyPartId",
+  as: "garments",
+});
+Garment.belongsTo(BodyPart, {
+  foreignKey: "bodyPartId",
+  as: "bodyPart",
+});
+
+export default BodyPart;
