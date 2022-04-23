@@ -51,5 +51,26 @@ export const assessOutfit = async (req, res, next) => {
     ),
   ]);
 
-  return res.status(201).json({ message: "All created" });
+  // estimate
+  const estimations = waypointsData.map(
+    ({ activity, forecast: { temp, windSpeed } }) => {
+      const effectiveWindSpeed = windSpeed + 0.004 * (activity - 105);
+      const layersClos = selectedOutfit.reduce((res, { clo, layer }) => {
+        const effectiveClo = clo * effectiveWindSpeed;
+
+        return { ...res, [layer]: (res.layer || 0) + effectiveClo };
+      }, {});
+      const totalClo = Object.values(layersClos).reduce(
+        (sum, layerCloSum) => sum + layerCloSum * 0.8,
+        0
+      );
+
+      const neededClo =
+        temp >= 25.5 ? 0.6 - 0.18 * (temp - 25.5) : 0.6 + 0.18 * (22.2 - temp);
+
+      return totalClo / neededClo;
+    }
+  );
+
+  return res.status(201).json({ message: "All created", estimations });
 };
