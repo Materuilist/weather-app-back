@@ -2,6 +2,8 @@ import { DataTypes } from "sequelize";
 
 import sequalize from "../utils/database.js";
 import Garment from "./garment.model.js";
+import Outfit from "./outfit.model.js";
+import UserLocation from "./user-location.model.js";
 
 const User = sequalize.define("User", {
   id: {
@@ -26,6 +28,24 @@ const User = sequalize.define("User", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+});
+
+User.hasMany(Outfit, {
+  foreignKey: "userId",
+  as: "outfits",
+});
+Outfit.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+});
+
+User.hasMany(UserLocation, {
+  foreignKey: "userId",
+  as: "user",
+});
+UserLocation.belongsTo(User, {
+  foreignKey: "userId",
+  as: "userLocations",
 });
 
 export default User;

@@ -7,14 +7,27 @@ import sequalize from "./database.js";
 import Garment from "../model/garment.model.js";
 import { CLOTHES_MOCK } from "./clothes-mock.js";
 import Wardrobe from "../model/wardrobe.model.js";
+import OutfitGarment from "../model/outfit-garment.model.js";
+import OutfitWeather from "../model/outfit-weather.model.js";
+import Activity from "../model/activity.model.js";
+import UserLocation from "../model/user-location.model.js";
+import Weather from "../model/weather.model.js";
+import Outfit from "../model/outfit.model.js";
 
 export default async (deleteAllDbs = false, createTestData = false) => {
   if (deleteAllDbs) {
     await Wardrobe.drop();
+    await OutfitGarment.drop();
+    await OutfitWeather.drop();
+    await Activity.drop();
+    await UserLocation.drop();
+    await Weather.drop();
+    await Outfit.drop();
     await Garment.drop();
     await BodyPart.drop();
     await User.drop();
     await Role.drop();
+
     await sequalize.sync();
   }
 

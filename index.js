@@ -6,6 +6,7 @@ import sequalize from "./utils/database.js";
 
 import authRouter from "./routes/auth.router.js";
 import garmentRouter from "./routes/garment.router.js";
+import forecastRouter from "./routes/forecast.router.js";
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(express.static(path.join(path.resolve(), "static")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/garment", garmentRouter);
+app.use("/api/forecast", forecastRouter);
 
 app.use("/", (error, req, res, next) => {
   if (error) {

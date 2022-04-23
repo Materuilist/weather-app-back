@@ -17,10 +17,6 @@ const Activity = sequalize.define("Activity", {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  naming: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 });
 
 export default Activity;

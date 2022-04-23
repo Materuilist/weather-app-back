@@ -9,10 +9,6 @@ const Outfit = sequalize.define("Outfit", {
     autoIncrement: true,
     primaryKey: true,
   },
-  naming: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 });
 
 export default Outfit;

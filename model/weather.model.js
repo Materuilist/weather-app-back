@@ -29,10 +29,6 @@ const Weather = sequalize.define("Weather", {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  humidity: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-  },
 });
 
 export default Weather;
