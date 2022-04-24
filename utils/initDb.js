@@ -13,6 +13,7 @@ import Activity from "../model/activity.model.js";
 import UserLocation from "../model/user-location.model.js";
 import Weather from "../model/weather.model.js";
 import Outfit from "../model/outfit.model.js";
+import { createStatsMockData } from "./stats-mock.js";
 
 export default async (deleteAllDbs = false, createTestData = false) => {
   if (deleteAllDbs) {
@@ -63,10 +64,30 @@ export default async (deleteAllDbs = false, createTestData = false) => {
         roleId: ROLES.DEFAULT,
         sex: 1,
       },
+      {
+        login: "user1",
+        password: await Encrypter.hash("user1"),
+        roleId: ROLES.DEFAULT,
+        sex: 2,
+      },
+      {
+        login: "user2",
+        password: await Encrypter.hash("user2"),
+        roleId: ROLES.DEFAULT,
+        sex: 1,
+      },
+      {
+        login: "user3",
+        password: await Encrypter.hash("user3"),
+        roleId: ROLES.DEFAULT,
+        sex: 2,
+      },
     ]);
 
     await Garment.bulkCreate(CLOTHES_MOCK);
 
     await Wardrobe.create({ userId: 2, garmentId: 1 });
+
+    await createStatsMockData();
   }
 };

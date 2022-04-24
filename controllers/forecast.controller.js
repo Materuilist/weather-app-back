@@ -9,7 +9,7 @@ import UserLocation from "../model/user-location.model.js";
 
 export const assessOutfit = async (req, res, next) => {
   const {
-    user: { id: userId, sex },
+    user: { id: userId },
     waypointsData,
     timestamp,
     outfit: selectedOutfit,

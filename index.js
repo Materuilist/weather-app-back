@@ -7,6 +7,7 @@ import sequalize from "./utils/database.js";
 import authRouter from "./routes/auth.router.js";
 import garmentRouter from "./routes/garment.router.js";
 import forecastRouter from "./routes/forecast.router.js";
+import statisticsRouter from "./routes/statistics.router.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(path.resolve(), "static")));
 app.use("/api/auth", authRouter);
 app.use("/api/garment", garmentRouter);
 app.use("/api/forecast", forecastRouter);
+app.use("/api/statistics", statisticsRouter);
 
 app.use("/", (error, req, res, next) => {
   if (error) {
@@ -36,6 +38,6 @@ app.use("/", (error, req, res, next) => {
 sequalize.sync().then(() => {
   app.listen(8000, () => {
     console.log(`I'm listening!`);
-    initDb(true, true);
+    // initDb(true, true);
   });
 });
