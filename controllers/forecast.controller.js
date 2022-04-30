@@ -6,10 +6,14 @@ import Outfit from "../model/outfit.model.js";
 import OutfitWeather from "../model/outfit-weather.model.js";
 import OutfitGarment from "../model/outfit-garment.model.js";
 import UserLocation from "../model/user-location.model.js";
+import { getOutfitClo } from "../utils/get-outfit-clo.js";
+import { getOutfitRecomendations } from "./shared.controller.js";
+
+const FROECAST_INACCURACY = 0.1;
 
 export const assessOutfit = async (req, res, next) => {
   const {
-    user: { id: userId },
+    user: { id: userId, sex: userSex },
     waypointsData,
     timestamp,
     outfit: selectedOutfit,
@@ -54,23 +58,57 @@ export const assessOutfit = async (req, res, next) => {
   // estimate
   const estimations = waypointsData.map(
     ({ activity, forecast: { temp, windSpeed } }) => {
-      const effectiveWindSpeed = windSpeed + 0.004 * (activity - 105);
-      const layersClos = selectedOutfit.reduce((res, { clo, layer }) => {
-        const effectiveClo = clo * effectiveWindSpeed;
-
-        return { ...res, [layer]: (res.layer || 0) + effectiveClo };
-      }, {});
-      const totalClo = Object.values(layersClos).reduce(
-        (sum, layerCloSum) => sum + layerCloSum * 0.8,
-        0
-      );
+      const totalClo = getOutfitClo(selectedOutfit, windSpeed, activity);
 
       const neededClo =
-        temp >= 25.5 ? 0.6 - 0.18 * (temp - 25.5) : 0.6 + 0.18 * (22.2 - temp);
+        temp >= 25.5
+          ? 0.6 - 0.18 * (temp - 25.5)
+          : temp <= 22.2
+          ? 0.6 + 0.18 * (22.2 - temp)
+          : 0.6;
 
       return totalClo / neededClo;
     }
   );
 
-  return res.status(201).json({ message: "All created", estimations });
+  const satisfactory_clo_bounds = [
+    1 - FROECAST_INACCURACY,
+    1 + FROECAST_INACCURACY,
+  ];
+  const meanEstimation =
+    estimations.reduce((sum, estimation) => sum + estimation, 0) /
+    estimations.length;
+  let recomendations;
+
+  if (
+    meanEstimation < satisfactory_clo_bounds[0] ||
+    meanEstimation > satisfactory_clo_bounds[1]
+  ) {
+    const meanActivity =
+      waypointsData.reduce((sum, { activity }) => sum + activity, 0) /
+      waypointsData.length;
+    const meanTemp =
+      waypointsData.reduce((sum, { forecast: { temp } }) => sum + temp, 0) /
+      waypointsData.length;
+    const meanWindSpeed =
+      waypointsData.reduce(
+        (sum, { forecast: { windSpeed } }) => sum + windSpeed,
+        0
+      ) / waypointsData.length;
+
+    const { fittingOutfits } = await getOutfitRecomendations({
+      userSex,
+      temp: meanTemp,
+      activity: meanActivity,
+      windSpeed: meanWindSpeed,
+    });
+    recomendations = fittingOutfits.slice(0, 5);
+  }
+
+  return res.status(201).json({
+    message: "All created",
+    estimations,
+    meanEstimation,
+    recomendations,
+  });
 };
